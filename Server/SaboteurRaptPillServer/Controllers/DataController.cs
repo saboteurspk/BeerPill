@@ -50,7 +50,10 @@ namespace SaboteurRaptPillServer.Controllers {
 
             var measurement = new {SG = sg, Plato = plato, Temperature = data.T, Angle = angle, X = data.X, Y = data.Y, Z = data.Z, Time = DateTime.Now};
             var dataDirectory = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
-            System.IO.File.AppendAllText(Path.Combine(dataDirectory, $"{data.DeviceId}.json"), $"{JsonSerializer.Serialize(measurement)}{System.Environment.NewLine}");
+            var path = Path.Combine(dataDirectory, $"{data.DeviceId}.json");
+            var content = System.IO.File.ReadAllText(path);
+
+            System.IO.File.WriteAllText(path, $"{JsonSerializer.Serialize(measurement)}{System.Environment.NewLine}" + content);
 
         }
 
