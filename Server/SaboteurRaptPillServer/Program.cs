@@ -1,6 +1,8 @@
 Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.AddFile(pathFormat: "Logs/Log-{Date}.txt", isJson: false, minimumLevel: LogLevel.Warning);
 builder.Services.AddControllers();
 var app = builder.Build();
 

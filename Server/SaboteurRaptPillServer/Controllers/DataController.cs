@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SaboteurRaptPillServer.DTO;
+using System.IO;
 using System.Text.Json;
 
 namespace SaboteurRaptPillServer.Controllers {
@@ -51,7 +52,7 @@ namespace SaboteurRaptPillServer.Controllers {
             var measurement = new {SG = sg, Plato = plato, Temperature = data.T, Angle = angle, X = data.X, Y = data.Y, Z = data.Z, Time = DateTime.Now};
             var dataDirectory = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
             var path = Path.Combine(dataDirectory, $"{data.DeviceId}.json");
-            var content = System.IO.File.ReadAllText(path);
+            var content =  System.IO.File.Exists(path) ? System.IO.File.ReadAllText(path): "";
 
             System.IO.File.WriteAllText(path, $"{JsonSerializer.Serialize(measurement)}{System.Environment.NewLine}" + content);
 
@@ -60,7 +61,8 @@ namespace SaboteurRaptPillServer.Controllers {
         [HttpGet]
         public string GetData(string deviceId) {
             var dataDirectory = (string) AppDomain.CurrentDomain.GetData("DataDirectory");
-            return System.IO.File.ReadAllText(Path.Combine(dataDirectory, $"{deviceId}.json"));
+            var path = Path.Combine(dataDirectory, $"{deviceId}.json");
+            return System.IO.File.Exists(path) ? System.IO.File.ReadAllText(path) : "";
 
         }
 
